@@ -1,9 +1,9 @@
 package ananin.pageobjects;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 
-import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
@@ -21,6 +21,7 @@ public class LoginPage {
             errorText = $(byXpath("//*[@id='js-flash-container']//div[@class='container-lg px-2']"));
 
     public void openPage( ){
+        Configuration.browserSize = "1920x1080";
         open("https://github.com/login");
     }
 
