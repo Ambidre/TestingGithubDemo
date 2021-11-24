@@ -1,26 +1,36 @@
 package ananin.tests;
 
-import ananin.pageobjects.LoginPage;
-
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class LoginPageGitHubTest extends LoginPage {
+import static com.codeborne.selenide.Selectors.byXpath;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 
-    LoginPage loginPage = new LoginPage();
+public class LoginPageGitHubTest {
+
+    @BeforeAll
+    static void beforeAll() {
+        Configuration.startMaximized = true;
+        open("https://github.com/login");
+    }
 
     @Test
     public void loginWithRealCredsTest() {
-        loginPage.openPage();
-        loginPage.setLogin("Ambidre").setPassword("mstitelnica1999");
-        loginPage.clickSignIn().clickProfileDropdown();
-        loginPage.checkLogin("Ambidre");
+        $("#login_field").setValue("Ambidre");
+        $("#password").setValue("mstitelnica1999");
+        $(byXpath("//input[@value='Sign in']")).click();
+        $(byXpath("//summary[@aria-label ='View profile and more']")).click();
+        $(byXpath("//strong[@class ='css-truncate-target']")).shouldHave(Condition.exactText("Ambidre"));
     }
 
     @Test
     public void loginWithEmptyCredsTest(){
-        loginPage.openPage();
-        loginPage.setLogin("Ambidre").setPassword("mstitelnica199");
-        loginPage.clickSignIn();
-        loginPage.checkError();
+        $("#login_field").setValue("");
+        $("#password").setValue("");
+        $(byXpath("//input[@value='Sign in']")).click();
+        $(byXpath("//*[@id='js-flash-container']//div[@class='container-lg px-2']")).shouldHave(Condition.exactText("Incorrect username or password."));
     }
 }
